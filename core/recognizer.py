@@ -40,9 +40,11 @@ def face_points(image):
             for line in file:
                 points = line
     elif os.path.isfile(image):
-        points = landmarks_by_face__(image)
-        with open(txt, 'w') as file:
-            file.write(str(points))
+        # points = landmarks_by_face__(image)
+        # with open(txt, 'w') as file:
+        #     file.write(str(points))
+        print("no key point provide.")
+        exit(-1)
 
     faces = json.loads(points)['faces']
 

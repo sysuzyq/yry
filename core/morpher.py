@@ -177,32 +177,34 @@ def face_merge(dst_img, src_img, out_img,
                blur_detail_x=None, blur_detail_y=None, mat_multiple=None):
     src_matrix, src_points, err = core.face_points(src_img)
     dst_matrix, dst_points, err = core.face_points(dst_img)
-
+    dst_img_path = dst_img
+    src_img_path = src_img
     src_img = cv2.imread(src_img, cv2.IMREAD_COLOR)
     dst_img = cv2.imread(dst_img, cv2.IMREAD_COLOR)
 
     dst_img = transformation_points(src_img, src_matrix[core.FACE_POINTS],
                                     dst_img, dst_matrix[core.FACE_POINTS])
-
     trans_file = 'images/' + str(int(time.time() * 1000)) + '.jpg'
     cv2.imwrite(trans_file, dst_img)
-    _, dst_points, err = core.face_points(trans_file)
+    _, dst_points, err = core.face_points(src_img_path)
+    # _, dst_points, err = core.face_points(trans_file)
 
     dst_img = morph_img(src_img, src_points, dst_img, dst_points, alpha)
 
     morph_file = 'images/' + str(int(time.time() * 1000)) + '.jpg'
     cv2.imwrite(morph_file, dst_img)
-    dst_matrix, dst_points, err = core.face_points(morph_file)
+    # dst_matrix, dst_points, err = core.face_points(morph_file)
+    dst_matrix, dst_points, err = core.face_points(src_img_path)
 
     src_img = tran_src(src_img, src_points, dst_points, face_area)
 
     dst_img = merge_img(src_img, dst_img, dst_matrix, dst_points, blur_detail_x, blur_detail_y, mat_multiple)
 
     os.remove(trans_file)
-    os.remove(trans_file + '.txt')
+    # os.remove(trans_file + '.txt')
 
     os.remove(morph_file)
-    os.remove(morph_file + '.txt')
+    # os.remove(morph_file + '.txt')
 
     cv2.imwrite(out_img, dst_img)
 
